@@ -1,6 +1,6 @@
 """
 Nicole Tressler
-April 23, 2026.
+April 21, 2026.
 CPSC 4970, Auburn University
 
 Final Project: PyQt5 Interface
@@ -22,6 +22,7 @@ def export_league_csv(league: League, filepath: str):
     Format: team_name, member_name, member_email
     """
     with open(filepath, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
         writer.writerow(["team_name", "member_name", "member_email"])
         for team in league.teams:
             if not team.members:

@@ -1,6 +1,6 @@
 """
 Nicole Tressler
-April 23, 2026.
+April 21, 2026.
 CPSC 4970, Auburn University
 
 Final Project: PyQt5 Interface
@@ -25,6 +25,10 @@ from ..models.team import Team
 from ..models.member import Member
 from .league_editor import LeagueEditorDialog
 
+
+"""
+Colors, Font, and styling specifications
+"""
 
 MAIN_STYLE = """
     QMainWindow {

@@ -1,6 +1,6 @@
 """
 Nicole Tressler
-April 23, 2026.
+April 21, 2026.
 CPSC 4970, Auburn University
 
 Final Project: PyQt5 Interface

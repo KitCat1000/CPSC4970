@@ -129,12 +129,12 @@ The database is saved as a `.json` file:
 {
   "leagues": [
     {
-      "name": "Winter League",
+      "name": "Curling Stones",
       "teams": [
         {
           "name": "Thunderstones",
           "members": [
-            { "name": "Alice Smith", "email": "alice@example.com" }
+            { "name": "Bruce Wayne", "email": "bwaynee@example.com" }
           ]
         }
       ]
