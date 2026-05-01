@@ -14,13 +14,15 @@ from PyQt5.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel,
     QLineEdit, QPushButton, QListWidget, QListWidgetItem,
     QMessageBox, QFileDialog, QAction, QMenuBar, QStatusBar,
-    QFrame, QSizePolicy
+    QFrame, QSizePolicy, QInputDialog
 )
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont, QColor
 
 from ..models.database import Database
 from ..models.league import League
+from ..models.team import Team
+from ..models.member import Member
 from .league_editor import LeagueEditorDialog
 
 
@@ -250,18 +252,44 @@ class MainWindow(QMainWindow):
         self._list.itemDoubleClicked.connect(self._edit_league)
         layout.addWidget(self._list, stretch=1)
 
-        # Add league row
-        add_row = QHBoxLayout()
-        add_row.setSpacing(10)
-        self._league_name_edit = QLineEdit()
-        self._league_name_edit.setPlaceholderText("Enter new league name...")
-        add_btn = QPushButton("Add League")
-        add_btn.setObjectName("primary")
-        add_btn.clicked.connect(self._add_league)
-        self._league_name_edit.returnPressed.connect(self._add_league)
-        add_row.addWidget(self._league_name_edit, stretch=1)
-        add_row.addWidget(add_btn)
-        layout.addLayout(add_row)
+
+
+
+
+
+
+
+        # Separator
+        sep2 = QFrame()
+        sep2.setObjectName("separator")
+        sep2.setFrameShape(QFrame.HLine)
+        sep2.setFixedHeight(1)
+        layout.addWidget(sep2)
+
+        # Quick-add buttons row: Add New League / Team / Member
+        quick_add_lbl = QLabel("QUICK ADD")
+        quick_add_lbl.setObjectName("section_label")
+        layout.addWidget(quick_add_lbl)
+
+        quick_row = QHBoxLayout()
+        quick_row.setSpacing(10)
+
+        new_league_btn = QPushButton("+ Add New League")
+        new_league_btn.setObjectName("primary")
+        new_league_btn.clicked.connect(self._quick_add_league)
+
+        new_team_btn = QPushButton("+ Add New Team")
+        new_team_btn.setObjectName("primary")
+        new_team_btn.clicked.connect(self._quick_add_team)
+
+        new_member_btn = QPushButton("+ Add New Member")
+        new_member_btn.setObjectName("primary")
+        new_member_btn.clicked.connect(self._quick_add_member)
+
+        quick_row.addWidget(new_league_btn)
+        quick_row.addWidget(new_team_btn)
+        quick_row.addWidget(new_member_btn)
+        layout.addLayout(quick_row)
 
         # Action buttons
         btn_row = QHBoxLayout()
@@ -293,6 +321,105 @@ class MainWindow(QMainWindow):
         self._status = QStatusBar()
         self.setStatusBar(self._status)
 
+
+
+    def _quick_add_league(self):
+        name, ok = QInputDialog.getText(
+            self, "Add New League", "Enter league name:"
+        )
+        if ok and name.strip():
+            try:
+                self._db.add_league(League(name=name.strip()))
+                self._refresh_list()
+                self._update_status()
+            except ValueError as e:
+                QMessageBox.critical(self, "Error", str(e))
+        elif ok:
+            QMessageBox.warning(self, "Input Required", "League name cannot be empty.")
+
+    def _quick_add_team(self):
+        leagues = self._db.leagues
+        if not leagues:
+            QMessageBox.warning(
+                self, "No Leagues",
+                "Please add a league first before adding a team."
+            )
+            return
+
+        # Ask which league to add the team to
+        league_names = [lg.name for lg in leagues]
+        league_name, ok = QInputDialog.getItem(
+            self, "Select League", "Add team to which league?",
+            league_names, 0, False
+        )
+        if not ok:
+            return
+
+        team_name, ok2 = QInputDialog.getText(
+            self, "Add New Team", "Enter team name:"
+        )
+        if ok2 and team_name.strip():
+            idx = league_names.index(league_name)
+            try:
+                leagues[idx].add_team(Team(name=team_name.strip()))
+                self._refresh_list()
+                self._update_status(f"Team '{team_name.strip()}' added to '{league_name}'.")
+            except ValueError as e:
+                QMessageBox.critical(self, "Error", str(e))
+        elif ok2:
+            QMessageBox.warning(self, "Input Required", "Team name cannot be empty.")
+
+    def _quick_add_member(self):
+        leagues = self._db.leagues
+        if not leagues:
+            QMessageBox.warning(
+                self, "No Leagues",
+                "Please add a league first before adding a member."
+            )
+            return
+
+        # Ask which league
+        league_names = [lg.name for lg in leagues]
+        league_name, ok = QInputDialog.getItem(
+            self, "Select League", "Add member to which league?",
+            league_names, 0, False
+        )
+        if not ok:
+            return
+
+        idx = league_names.index(league_name)
+        teams = leagues[idx].teams
+        if not teams:
+            QMessageBox.warning(
+                self, "No Teams",
+                f"League '{league_name}' has no teams yet. Please add a team first."
+            )
+            return
+
+        # Ask which team
+        team_names = [t.name for t in teams]
+        team_name, ok2 = QInputDialog.getItem(
+            self, "Select Team", "Add member to which team?",
+            team_names, 0, False
+        )
+        if not ok2:
+            return
+
+        member_name, ok3 = QInputDialog.getText(
+            self, "Add New Member", "Enter member name:"
+        )
+        if ok3 and member_name.strip():
+            t_idx = team_names.index(team_name)
+            try:
+                teams[t_idx].add_member(Member(name=member_name.strip()))
+                self._update_status(f"Member '{member_name.strip()}' added to '{team_name}'.")
+            except ValueError as e:
+                QMessageBox.critical(self, "Error", str(e))
+        elif ok3:
+            QMessageBox.warning(self, "Input Required", "Member name cannot be empty.")
+
+
+
     def _refresh_list(self):
         self._list.clear()
         for league in self._db.leagues:
@@ -308,18 +435,9 @@ class MainWindow(QMainWindow):
         self._edit_btn.setEnabled(enabled)
         self._delete_btn.setEnabled(enabled)
 
-    def _add_league(self):
-        name = self._league_name_edit.text().strip()
-        if not name:
-            QMessageBox.warning(self, "Input Required", "League name cannot be empty.")
-            return
-        try:
-            self._db.add_league(League(name=name))
-            self._refresh_list()
-            self._league_name_edit.clear()
-            self._update_status()
-        except ValueError as e:
-            QMessageBox.critical(self, "Error", str(e))
+
+
+
 
     def _edit_league(self):
         idx = self._selected_index

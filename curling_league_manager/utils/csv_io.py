@@ -11,9 +11,9 @@ Final Project: PyQt5 Interface
 
 import csv
 from typing import List
-from ..models.league import League
-from ..models.team import Team
-from ..models.member import Member
+from curling_league_manager.models.league import League
+from curling_league_manager.models.team import Team
+from curling_league_manager.models.member import Member
 
 
 def export_league_csv(league: League, filepath: str):

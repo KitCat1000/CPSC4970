@@ -20,7 +20,7 @@ from PyQt5.QtCore import Qt
 from ..models.league import League
 from ..models.team import Team
 from ..utils.csv_io import export_league_csv, import_league_csv
-from team_editor import TeamEditorDialog
+from .team_editor import TeamEditorDialog
 
 STYLE = """
     QDialog {

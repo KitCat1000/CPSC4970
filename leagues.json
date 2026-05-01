@@ -1,0 +1,77 @@
+{
+  "leagues": [
+    {
+      "name": "The Hack Pack",
+      "teams": [
+        {
+          "name": "Olympian Team",
+          "members": []
+        }
+      ]
+    },
+    {
+      "name": "The Curling Stones",
+      "teams": [
+        {
+          "name": "Alpha Team",
+          "members": [
+            {
+              "name": "Ares",
+              "email": "ares@curlingteam.com"
+            },
+            {
+              "name": "Aphrodite",
+              "email": "aphrodite@curlingteam.com"
+            },
+            {
+              "name": "Hera",
+              "email": "hera@curlingteam.com"
+            },
+            {
+              "name": "Poseidon",
+              "email": "poseidon@curlingteam.com"
+            }
+          ]
+        },
+        {
+          "name": "Beta Team",
+          "members": [
+            {
+              "name": "Sherlock Holmes",
+              "email": "sholmes@curlingteam.com"
+            },
+            {
+              "name": "Mycroft Holmes",
+              "email": "mholmes@curlingteam.com"
+            },
+            {
+              "name": "John Watson",
+              "email": "jwatson@curlingteam.com"
+            },
+            {
+              "name": "James Moriarty",
+              "email": "jmoriarty@curlingteam.com"
+            }
+          ]
+        },
+        {
+          "name": "Delta Team",
+          "members": [
+            {
+              "name": "Jason Todd",
+              "email": "jtodd@curlingteam.com"
+            },
+            {
+              "name": "Bruce Wayne",
+              "email": "bwayne@curlingteam.com"
+            },
+            {
+              "name": "Alfred Pennyworth",
+              "email": "apennyworth@curlingteam.com"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
