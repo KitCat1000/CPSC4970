@@ -1,6 +1,7 @@
 # Curling League Manager
 
-A PyQt5 desktop application for managing curling leagues, teams, and team members. Data is stored in a simple JSON database file and can be imported/exported via CSV.
+A PyQt5 desktop application for managing curling leagues, teams, and team members. Data is stored in a simple 
+J-SON database file and can be imported/exported via CSV.
 
 ---
 
@@ -18,25 +19,26 @@ A PyQt5 desktop application for managing curling leagues, teams, and team member
 ## Project Structure
 
 ```
-curling_league_manager/          ← top-level package
+curling_league_manager/          < top-level package
     __init__.py
     models/
         __init__.py
-        member.py                ← Member data class
-        team.py                  ← Team data class (contains Members)
-        league.py                ← League data class (contains Teams)
-        database.py              ← Database (contains Leagues), load/save JSON
+        member.py                < Member data class
+        team.py                  < Team data class (contains Members)
+        league.py                < League data class (contains Teams)
+        database.py              < Database (contains Leagues), load/save JSON
     ui/
         __init__.py
-        main_window.py           ← QMainWindow: league list, load/save DB
-        league_editor.py         ← QDialog: team list, import/export CSV
-        team_editor.py           ← QDialog: member list, add/update/delete
+        main_window.py           < QMainWindow: league list, load/save DB
+        league_editor.py         < QDialog: team list, import/export CSV
+        team_editor.py           < QDialog: member list, add/update/delete
     utils/
         __init__.py
-        csv_io.py                ← CSV import/export helpers
-main.py                          ← Application entry point
+        csv_io.py                < CSV import/export helpers
+main.py                          < Application entry point
 requirements.txt
 README.md
+leagues.json                     < Sample file containing leagues, teams, and team members
 ```
 
 ---
